@@ -233,7 +233,7 @@ void setup() {
   SERIAL_RENARD.print("Renard");
   printer.begin(); // Init printer (same regardless of serial type)
   nextFortunePlace = random(0, FORTUNES_LENGTH);
-  printerTest();    
+  print();    
 }
 
 boolean last = false;
@@ -301,15 +301,18 @@ void loop() {
 
 void print() {
   
-  //printer.justify('C');
-  printer.printBitmap(logo_width, logo_height, logo_data);
-  //printer.justify('L');
+  printer.printBitmap(img_top_width, img_top_height, img_top_data);
+  
   printer.feed(2);
   
   printer.println(getFortune());
   
   printer.feed(2);
 
+  printer.printBitmap(img_bottom_width, img_bottom_height, img_bottom_data);
+  
+  printer.feed(2);
+  
   printer.print(F("Your lucky numbers are: "));
 
     getMeSomeLuckyNumbers();
