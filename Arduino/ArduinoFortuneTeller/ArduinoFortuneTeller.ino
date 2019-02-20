@@ -242,18 +242,15 @@ int brightness = 0;
 int fadeAmount = 5;
 long millisLastFade = 0;
 
-void loop() {
- renard.processInput();
+void processNonPrintingEvents()
+{
+   renard.processInput();
 
   
   int renardGlobeValue = renard.channelValue(RENARD_CHANNEL_GLOBE);
-  int renardPrinterValue = renard.channelValue(RENARD_CHANNEL_PRINTER);
   int renardChannelReset = renard.channelValue(RENARD_CHANNEL_RESET);
 
-  
-  if (renardPrinterValue >= 128) {
-    print();
-  }
+
 
   if(renardChannelReset >=128){
     isRunning = false;
@@ -299,21 +296,37 @@ void loop() {
 
 }
 
+void loop() {
+  processNonPrintingEvents();
+  
+  int renardPrinterValue = renard.channelValue(RENARD_CHANNEL_PRINTER);
+  if (renardPrinterValue >= 128) {
+    print();
+  }
+}
+
 void print() {
   
   printer.printBitmap(img_top_width, img_top_height, img_top_data);
+  processNonPrintingEvents();
   
   printer.feed(2);
+  processNonPrintingEvents();
   
   printer.println(getFortune());
+  processNonPrintingEvents();
   
   printer.feed(2);
+  processNonPrintingEvents();
 
   printer.printBitmap(img_bottom_width, img_bottom_height, img_bottom_data);
+  processNonPrintingEvents();
   
   printer.feed(2);
+  processNonPrintingEvents();
   
   printer.print(F("Your lucky numbers are: "));
+  processNonPrintingEvents();
 
     getMeSomeLuckyNumbers();
     sortNumbers(arrayOfLuckyNumbers, LUCKY_NUMBERS_LENGTH);
@@ -324,9 +337,12 @@ void print() {
     }
     printer.print(arrayOfLuckyNumbers[i]);
     printer.print(F(" "));
+    processNonPrintingEvents();
   }
   printer.feed(5);  
+  processNonPrintingEvents();
   printer.wake(); // MUST wake() before printing again, even if reset
+  processNonPrintingEvents();
   printer.setDefault(); // Restore printer to defaults
 }
 
