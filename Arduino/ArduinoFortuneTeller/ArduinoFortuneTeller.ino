@@ -188,6 +188,7 @@ const char *
 #define RENARD_CHANNEL_RESET 1
 #define RENARD_CHANNEL_GLOBE 7
 #define RENARD_CHANNEL_PRINTER 8
+#define RENARD_CHANNEL_SPOTLIGHTS 2
 
 //PINS
 #define PIN_BUTTON_PRESSED 53
@@ -195,6 +196,8 @@ const char *
 
 #define PIN_RELAY_GLOBE 28
 #define PIN_RELAY_1 24
+
+#define PIN_SPOTLIGHTS 7
 
 #define PIN_MAKEY_MAKEY 45
 
@@ -221,6 +224,8 @@ void setup() {
   
   pinMode(PIN_RELAY_GLOBE, OUTPUT);
   pinMode(PIN_RELAY_1, OUTPUT);
+
+  pinMode(PIN_SPOTLIGHTS, OUTPUT);
   
   digitalWrite(PIN_RELAY_GLOBE, HIGH);
   digitalWrite(PIN_RELAY_1, HIGH);
@@ -249,8 +254,9 @@ void processNonPrintingEvents()
   
   int renardGlobeValue = renard.channelValue(RENARD_CHANNEL_GLOBE);
   int renardChannelReset = renard.channelValue(RENARD_CHANNEL_RESET);
+  int renardSpotlightsValue = renard.channelValue(RENARD_CHANNEL_SPOTLIGHTS);
 
-
+  analogWrite(PIN_SPOTLIGHTS, renardSpotlightsValue);
 
   if(renardChannelReset >=128){
     isRunning = false;
