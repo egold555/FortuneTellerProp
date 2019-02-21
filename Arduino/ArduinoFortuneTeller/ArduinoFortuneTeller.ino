@@ -1,4 +1,4 @@
-#include <Renard.h> 
+#include <Renard.h>
 #include "Adafruit_Thermal.h"
 #include "img_top.h"
 #include "img_bottom.h"
@@ -95,94 +95,94 @@ const char string_85[] PROGMEM = "The problem with the gene pool is that there i
 const char string_86[] PROGMEM = "When you do not know what you are doing, do it neatly.";
 
 const char *
-  const fortunes[] PROGMEM = {
-    string_1,
-    string_2,
-    string_3,
-    string_4,
-    string_5,
-    string_6,
-    string_7,
-    string_8,
-    string_9,
-    string_10,
-    string_11,
-    string_12,
-    string_13,
-    string_14,
-    string_15,
-    string_16,
-    string_17,
-    string_18,
-    string_19,
-    string_20,
-    string_21,
-    string_22,
-    string_23,
-    string_24,
-    string_25,
-    string_26,
-    string_27,
-    string_28,
-    string_29,
-    string_30,
-    string_31,
-    string_32,
-    string_33,
-    string_34,
-    string_35,
-    string_36,
-    string_37,
-    string_38,
-    string_39,
-    string_40,
-    string_41,
-    string_42,
-    string_43,
-    string_44,
-    string_45,
-    string_46,
-    string_47,
-    string_48,
-    string_49,
-    string_50,
-    string_51,
-    string_52,
-    string_53,
-    string_54,
-    string_55,
-    string_56,
-    string_57,
-    string_58,
-    string_59,
-    string_60,
-    string_61,
-    string_62,
-    string_63,
-    string_64,
-    string_65,
-    string_66,
-    string_67,
-    string_68,
-    string_69,
-    string_70,
-    string_71,
-    string_72,
-    string_73,
-    string_74,
-    string_75,
-    string_76,
-    string_77,
-    string_78,
-    string_79,
-    string_80,
-    string_81,
-    string_82,
-    string_83,
-    string_84,
-    string_85,
-    string_86
-  };
+const fortunes[] PROGMEM = {
+  string_1,
+  string_2,
+  string_3,
+  string_4,
+  string_5,
+  string_6,
+  string_7,
+  string_8,
+  string_9,
+  string_10,
+  string_11,
+  string_12,
+  string_13,
+  string_14,
+  string_15,
+  string_16,
+  string_17,
+  string_18,
+  string_19,
+  string_20,
+  string_21,
+  string_22,
+  string_23,
+  string_24,
+  string_25,
+  string_26,
+  string_27,
+  string_28,
+  string_29,
+  string_30,
+  string_31,
+  string_32,
+  string_33,
+  string_34,
+  string_35,
+  string_36,
+  string_37,
+  string_38,
+  string_39,
+  string_40,
+  string_41,
+  string_42,
+  string_43,
+  string_44,
+  string_45,
+  string_46,
+  string_47,
+  string_48,
+  string_49,
+  string_50,
+  string_51,
+  string_52,
+  string_53,
+  string_54,
+  string_55,
+  string_56,
+  string_57,
+  string_58,
+  string_59,
+  string_60,
+  string_61,
+  string_62,
+  string_63,
+  string_64,
+  string_65,
+  string_66,
+  string_67,
+  string_68,
+  string_69,
+  string_70,
+  string_71,
+  string_72,
+  string_73,
+  string_74,
+  string_75,
+  string_76,
+  string_77,
+  string_78,
+  string_79,
+  string_80,
+  string_81,
+  string_82,
+  string_83,
+  string_84,
+  string_85,
+  string_86
+};
 
 //RENARD
 #define RENARD_CHANNEL_RESET 1
@@ -215,30 +215,52 @@ Renard renard(SERIAL_RENARD, 8);
 
 Adafruit_Thermal printer( & SERIAL_PRINTER);
 
+
+// Constants for gamma correction on LEDs.
+const uint8_t PROGMEM gamma[] = {
+
+  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,
+  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2,  2,  2,
+  2,  3,  3,  3,  3,  3,  3,  3,  4,  4,  4,  4,  4,  5,  5,  5,
+  5,  6,  6,  6,  6,  7,  7,  7,  7,  8,  8,  8,  9,  9,  9, 10,
+  10, 10, 11, 11, 11, 12, 12, 13, 13, 13, 14, 14, 15, 15, 16, 16,
+  17, 17, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 23, 24, 24, 25,
+  25, 26, 27, 27, 28, 29, 29, 30, 31, 32, 32, 33, 34, 35, 35, 36,
+  37, 38, 39, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 50,
+  51, 52, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 68,
+  69, 70, 72, 73, 74, 75, 77, 78, 79, 81, 82, 83, 85, 86, 87, 89,
+  90, 92, 93, 95, 96, 98, 99, 101, 102, 104, 105, 107, 109, 110, 112, 114,
+  115, 117, 119, 120, 122, 124, 126, 127, 129, 131, 133, 135, 137, 138, 140, 142,
+  144, 146, 148, 150, 152, 154, 156, 158, 160, 162, 164, 167, 169, 171, 173, 175,
+  177, 180, 182, 184, 186, 189, 191, 193, 196, 198, 200, 203, 205, 208, 210, 213,
+  215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252, 255
+};
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
   randomSeed(analogRead(0));
   pinMode(PIN_BUTTON_PRESSED, INPUT_PULLUP);
   pinMode(PIN_BUTTON_LIGHT, OUTPUT);
-  
+
   pinMode(PIN_RELAY_GLOBE, OUTPUT);
   pinMode(PIN_RELAY_1, OUTPUT);
 
   pinMode(PIN_SPOTLIGHTS, OUTPUT);
-  
+
   digitalWrite(PIN_RELAY_GLOBE, HIGH);
   digitalWrite(PIN_RELAY_1, HIGH);
 
   pinMode(PIN_MAKEY_MAKEY, OUTPUT);
   digitalWrite(PIN_MAKEY_MAKEY, HIGH);
-  
+
   SERIAL_PRINTER.begin(19200); // Use this instead if using hardware serial
   SERIAL_RENARD.begin(57600); //Renard Serial
   SERIAL_RENARD.print("Renard");
   printer.begin(); // Init printer (same regardless of serial type)
   nextFortunePlace = random(0, FORTUNES_LENGTH);
-  print();    
+  print();
 }
 
 boolean last = false;
@@ -249,22 +271,22 @@ long millisLastFade = 0;
 
 void processNonPrintingEvents()
 {
-   renard.processInput();
+  renard.processInput();
 
-  
+
   int renardGlobeValue = renard.channelValue(RENARD_CHANNEL_GLOBE);
   int renardChannelReset = renard.channelValue(RENARD_CHANNEL_RESET);
   int renardSpotlightsValue = renard.channelValue(RENARD_CHANNEL_SPOTLIGHTS);
 
-  analogWrite(PIN_SPOTLIGHTS, renardSpotlightsValue);
+  writeGammaCorrectedAnalog(PIN_SPOTLIGHTS, renardSpotlightsValue);
 
-  if(renardChannelReset >=128){
+  if (renardChannelReset >= 128) {
     isRunning = false;
   }
 
   if (renardGlobeValue >= 128) {
     digitalWrite(PIN_RELAY_GLOBE, LOW);
-  } 
+  }
   else {
     digitalWrite(PIN_RELAY_GLOBE, HIGH);
   }
@@ -276,24 +298,24 @@ void processNonPrintingEvents()
       isRunning = true;
     }
     last = true;
-  } 
+  }
   else {
     last = false;
     digitalWrite(PIN_MAKEY_MAKEY, HIGH);
   }
 
-  if(isRunning){
+  if (isRunning) {
     //Turn the LED in the button off
   }
   else {
     if (millis() > millisLastFade + 30) {
       millisLastFade = millis();
-      
+
       //Fade the led in the button
-      analogWrite(PIN_BUTTON_LIGHT, brightness);
-    
+      writeGammaCorrectedAnalog(PIN_BUTTON_LIGHT, brightness);
+
       brightness = brightness + fadeAmount;
-    
+
       if (brightness <= 0 || brightness >= 255) {
         fadeAmount = -fadeAmount;
       }
@@ -304,7 +326,7 @@ void processNonPrintingEvents()
 
 void loop() {
   processNonPrintingEvents();
-  
+
   int renardPrinterValue = renard.channelValue(RENARD_CHANNEL_PRINTER);
   if (renardPrinterValue >= 128) {
     print();
@@ -312,31 +334,31 @@ void loop() {
 }
 
 void print() {
-  
+
   printer.printBitmap(img_top_width, img_top_height, img_top_data);
   processNonPrintingEvents();
-  
+
   printer.feed(2);
   processNonPrintingEvents();
-  
+
   printer.println(getFortune());
   processNonPrintingEvents();
-  
+
   printer.feed(2);
   processNonPrintingEvents();
 
   printer.printBitmap(img_bottom_width, img_bottom_height, img_bottom_data);
   processNonPrintingEvents();
-  
+
   printer.feed(2);
   processNonPrintingEvents();
-  
+
   printer.print(F("Your lucky numbers are: "));
   processNonPrintingEvents();
 
-    getMeSomeLuckyNumbers();
-    sortNumbers(arrayOfLuckyNumbers, LUCKY_NUMBERS_LENGTH);
-    
+  getMeSomeLuckyNumbers();
+  sortNumbers(arrayOfLuckyNumbers, LUCKY_NUMBERS_LENGTH);
+
   for (int i = 0; i < LUCKY_NUMBERS_LENGTH; i++) {
     if (i == LUCKY_NUMBERS_LENGTH - 1) {
       printer.print(F("and "));
@@ -345,16 +367,16 @@ void print() {
     printer.print(F(" "));
     processNonPrintingEvents();
   }
-  printer.feed(5);  
+  printer.feed(5);
   processNonPrintingEvents();
   printer.wake(); // MUST wake() before printing again, even if reset
   processNonPrintingEvents();
   printer.setDefault(); // Restore printer to defaults
 }
 
-void printerTest(){
+void printerTest() {
   printer.println(F("Arduino Reset!"));
-  
+
   printer.feed(5);
   printer.wake(); // MUST wake() before printing again, even if reset
   printer.setDefault(); // Restore printer to defaults
@@ -366,7 +388,7 @@ char * getFortune() {
   if (nextFortunePlace >= FORTUNES_LENGTH) {
     //printer.print(nextFortunePlace);  printer.print(F(">=")); printer.print(FORTUNES_LENGTH); printer.println();
     nextFortunePlace = 0;
-    
+
   }
   return fortune;
 }
@@ -393,14 +415,20 @@ void getMeSomeLuckyNumbers() {
 
 void sortNumbers(int *a, int n)
 {
- for (int i = 1; i < n; ++i)
- {
-   int j = a[i];
-   int k;
-   for (k = i - 1; (k >= 0) && (j < a[k]); k--)
-   {
-     a[k + 1] = a[k];
-   }
-   a[k + 1] = j;
- }
+  for (int i = 1; i < n; ++i)
+  {
+    int j = a[i];
+    int k;
+    for (k = i - 1; (k >= 0) && (j < a[k]); k--)
+    {
+      a[k + 1] = a[k];
+    }
+    a[k + 1] = j;
+  }
+}
+
+void writeGammaCorrectedAnalog(int pin, int value)
+{
+  int gammaCorrected = pgm_read_byte(&gamma[value]);
+  analogWrite(pin, gammaCorrected);
 }
