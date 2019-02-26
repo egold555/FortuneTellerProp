@@ -1,7 +1,7 @@
 #include <Renard.h>
 #include "Adafruit_Thermal.h"
-#include "img_top.h"
-#include "img_bottom.h"
+#include "img_top2.h"
+#include "img_bottom2.h"
 
 int arrayOfLuckyNumbers[5];
 #define LUCKY_NUMBERS_LENGTH (sizeof(arrayOfLuckyNumbers) / sizeof(arrayOfLuckyNumbers[0]))
