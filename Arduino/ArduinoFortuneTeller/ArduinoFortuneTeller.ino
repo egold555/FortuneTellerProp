@@ -341,7 +341,8 @@ void print() {
   printer.feed(2);
   processNonPrintingEvents();
 
-  printer.println(getFortune());
+  //printer.println(getFortune());
+  printWrap(getFortune());
   processNonPrintingEvents();
 
   printer.feed(2);
@@ -432,3 +433,43 @@ void writeGammaCorrectedAnalog(int pin, int value)
   int gammaCorrected = pgm_read_byte(&gamma[value]);
   analogWrite(pin, gammaCorrected);
 }
+
+
+//http://forum.arduino.cc/index.php?topic=267449.0
+const char * split (const char * s, const int length)
+{
+  // if it will fit return whole thing
+  if (strlen (s) <= length)
+    return s + strlen (s);
+
+  // searching backwards, find the last space
+  for (const char * space = &s [length]; space != s; space--)
+    if (*space == ' ')
+      return space;
+
+  // not found? return a whole line
+  return &s [length];
+} // end of split
+
+void printWrap(char str[]){
+  const char * p = str;
+  
+  // keep going until we run out of text
+  while (*p)
+    {
+    // find the position of the space
+    const char * endOfLine = split (p, 32);  
+    
+    // display up to that
+    while (p != endOfLine)
+      printer.print (*p++);
+      
+    // finish that line
+    printer.println ();
+    
+    // if we hit a space, move on past it
+    if (*p == ' ')
+      p++;
+    }
+}
+
