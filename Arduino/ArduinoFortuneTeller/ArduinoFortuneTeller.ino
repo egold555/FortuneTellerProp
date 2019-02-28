@@ -1,12 +1,13 @@
 #include <Renard.h>
 #include "Adafruit_Thermal.h"
-#include "img_top2.h"
-#include "img_bottom2.h"
+#include "img_top2.h" //Ivan's Insight
+#include "img_bottom2.h" //Play again for more wisdom
 
-int arrayOfLuckyNumbers[5];
+int arrayOfLuckyNumbers[5]; //stores the lucky numbers
 #define LUCKY_NUMBERS_LENGTH (sizeof(arrayOfLuckyNumbers) / sizeof(arrayOfLuckyNumbers[0]))
 
 char buffer[120]; //max is 109 but just to be on the safe side
+//Every single thing it could print as a fortune
 const char string_1[] PROGMEM = "You cannot achieve the impossible without attempting the absurd.";
 const char string_2[] PROGMEM = "What we see is mainly what we look for.";
 const char string_3[] PROGMEM = "What you are is what you have been. What you'll be is what you do now.";
@@ -94,6 +95,7 @@ const char string_84[] PROGMEM = "The chief cause of problems is solutions.";
 const char string_85[] PROGMEM = "The problem with the gene pool is that there is no lifeguard.";
 const char string_86[] PROGMEM = "When you do not know what you are doing, do it neatly.";
 
+//List of everything it could print
 const char *
 const fortunes[] PROGMEM = {
   string_1,
@@ -211,8 +213,6 @@ int nextFortunePlace = 0;
 
 Renard renard(SERIAL_RENARD, 8);
 
-
-
 Adafruit_Thermal printer( & SERIAL_PRINTER);
 
 
@@ -240,7 +240,7 @@ const uint8_t PROGMEM gamma[] = {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(0)); //Sets the seed to be a random floating point number so the random numbers don't repete
   pinMode(PIN_BUTTON_PRESSED, INPUT_PULLUP);
   pinMode(PIN_BUTTON_LIGHT, OUTPUT);
 
@@ -259,7 +259,7 @@ void setup() {
   SERIAL_RENARD.begin(57600); //Renard Serial
   SERIAL_RENARD.print("Renard");
   printer.begin(); // Init printer (same regardless of serial type)
-  nextFortunePlace = random(0, FORTUNES_LENGTH);
+  nextFortunePlace = random(0, FORTUNES_LENGTH); //next fortune it will print
   print();
 }
 
@@ -269,6 +269,7 @@ int brightness = 0;
 int fadeAmount = 5;
 long millisLastFade = 0;
 
+//This is so the printer does not hang other lights as much.
 void processNonPrintingEvents()
 {
   renard.processInput();
@@ -325,14 +326,16 @@ void processNonPrintingEvents()
 }
 
 void loop() {
-  processNonPrintingEvents();
+  processNonPrintingEvents(); //Everything but the printer
 
+  //handel the printer seperetly
   int renardPrinterValue = renard.channelValue(RENARD_CHANNEL_PRINTER);
   if (renardPrinterValue >= 128) {
     print();
   }
 }
 
+//Prints out everything in order on the printer
 void print() {
 
   printer.printBitmap(img_top_width, img_top_height, img_top_data);
@@ -354,7 +357,7 @@ void print() {
   printer.feed(2);
   processNonPrintingEvents();
 
-  printer.print(F("Your lucky numbers are: "));
+  printer.print(F("Your lucky numbers are: ")); //Use F() to not use up ram every time it prints the string.
   processNonPrintingEvents();
 
   getMeSomeLuckyNumbers();
@@ -375,14 +378,7 @@ void print() {
   printer.setDefault(); // Restore printer to defaults
 }
 
-void printerTest() {
-  printer.println(F("Arduino Reset!"));
-
-  printer.feed(5);
-  printer.wake(); // MUST wake() before printing again, even if reset
-  printer.setDefault(); // Restore printer to defaults
-}
-
+//Get a random fortune
 char * getFortune() {
   char * fortune = strcpy_P(buffer, (char * ) pgm_read_word( & (fortunes[nextFortunePlace]))); // Necessary casts and dereferencing, just copy.
   nextFortunePlace++;
@@ -394,10 +390,12 @@ char * getFortune() {
   return fortune;
 }
 
+//Get random numbers between 0 and 100
 int getRandomNumber() {
   return random(0, 100);
 }
 
+//Gets random lucky numbers, and pretty prints them, and make sure they don't repete
 void getMeSomeLuckyNumbers() {
   for (int i = 0; i < LUCKY_NUMBERS_LENGTH; i++) {
     bool duplicate = false;
@@ -414,6 +412,7 @@ void getMeSomeLuckyNumbers() {
   }
 }
 
+//Sorts the numbers from least to greatest
 void sortNumbers(int *a, int n)
 {
   for (int i = 1; i < n; ++i)
@@ -428,6 +427,7 @@ void sortNumbers(int *a, int n)
   }
 }
 
+//Use for LED gamma correction
 void writeGammaCorrectedAnalog(int pin, int value)
 {
   int gammaCorrected = pgm_read_byte(&gamma[value]);
@@ -436,6 +436,7 @@ void writeGammaCorrectedAnalog(int pin, int value)
 
 
 //http://forum.arduino.cc/index.php?topic=267449.0
+//Word wrapping for fortunes
 const char * split (const char * s, const int length)
 {
   // if it will fit return whole thing
@@ -451,25 +452,26 @@ const char * split (const char * s, const int length)
   return &s [length];
 } // end of split
 
-void printWrap(char str[]){
+//Actually print the word wrapping
+void printWrap(char str[]) {
   const char * p = str;
-  
+
   // keep going until we run out of text
   while (*p)
-    {
+  {
     // find the position of the space
-    const char * endOfLine = split (p, 32);  
-    
+    const char * endOfLine = split (p, 32);
+
     // display up to that
     while (p != endOfLine)
       printer.print (*p++);
-      
+
     // finish that line
     printer.println ();
-    
+
     // if we hit a space, move on past it
     if (*p == ' ')
       p++;
-    }
+  }
 }
 
