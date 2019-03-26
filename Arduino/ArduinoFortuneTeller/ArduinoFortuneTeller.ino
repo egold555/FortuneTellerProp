@@ -238,9 +238,8 @@ const uint8_t PROGMEM gamma[] = {
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void setup() {
-  randomSeed(analogRead(0)); //Sets the seed to be a random floating point number so the random numbers don't repete
+  randomSeed(analogRead(A0)); //Sets the seed to be a random floating point number so the random numbers don't repete
   pinMode(PIN_BUTTON_PRESSED, INPUT_PULLUP);
   pinMode(PIN_BUTTON_LIGHT, OUTPUT);
 
@@ -260,7 +259,7 @@ void setup() {
   SERIAL_RENARD.print("Renard");
   printer.begin(); // Init printer (same regardless of serial type)
   nextFortunePlace = random(0, FORTUNES_LENGTH); //next fortune it will print
-  print();
+  print("Successfully booted!");
 }
 
 boolean last = false;
@@ -335,8 +334,12 @@ void loop() {
   }
 }
 
+void print(){
+  print(getFortune());
+}
+
 //Prints out everything in order on the printer
-void print() {
+void print(char * msg) {
 
   printer.printBitmap(img_top_width, img_top_height, img_top_data);
   processNonPrintingEvents();
@@ -344,8 +347,7 @@ void print() {
   printer.feed(2);
   processNonPrintingEvents();
 
-  //printer.println(getFortune());
-  printWrap(getFortune());
+  printWrap(msg);
   processNonPrintingEvents();
 
   printer.feed(2);
@@ -474,4 +476,6 @@ void printWrap(char str[]) {
       p++;
   }
 }
+
+
 
